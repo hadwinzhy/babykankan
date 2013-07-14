@@ -13,6 +13,11 @@ function getUsers(){
     return JSON.parse(localStorage.getItem(CONST_STORAGE_USER_LIST));
 }
 
+function getCurrentUserName(){
+    return localStorage.getItem(CONST_STORAGE_USERNAME);
+}
+
+
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     console.log("back  onRequest...",request.values);
     if (request.method == "setLocalStorage"){

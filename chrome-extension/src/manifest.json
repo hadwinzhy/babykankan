@@ -12,7 +12,11 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "css": ["css/content-script.css"],
-      "js": ["js/libs/jquery.js", "js/libs/utils.js", "js/chrome/url.js"],
+      "js": [
+          "js/libs/jquery.js",
+          "js/libs/utils.js", 
+          "js/chrome/url.js"
+      ],
       "run_at": "document_end",
       "all_frames": true
     }
@@ -20,13 +24,15 @@
   "background":{
     "scripts":[
         "js/libs/jquery.js",
-        "js/background.js"
+        "js/background.js",
+        "js/context_menu.js"
         ]
   },
   "options_page":"options.html",
   "permissions" : [
     "tabs",
-      "http://*/*", "https://*/*",
+    "contextMenus",
+    "http://*/*", "https://*/*",
     "http://*.tmall.com/*",
     "https://*.taobao.com/*"
   ]
