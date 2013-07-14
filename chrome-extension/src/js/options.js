@@ -5,11 +5,20 @@ var CONST_STORAGE_PASSWORD = "__STORAGE_PASSWORD__";
 function save_options() {
     localStorage.setItem(CONST_STORAGE_USERNAME, $("#username").val());
     localStorage.setItem(CONST_STORAGE_PASSWORD, $("#password").val());
+
+    //关闭tab
+    chrome.tabs.getCurrent(function(tab){
+        console.log("current tab",arguments)
+        chrome.tabs.remove(tab.id);
+    });
+
     $("#info").html("保存成功.").show();
+
     chrome.extension.sendRequest({method: "setLocalStorage", values: {
         username: localStorage.getItem(CONST_STORAGE_USERNAME),
         password: localStorage.getItem(CONST_STORAGE_PASSWORD)
     }});
+
 }
 // 从保存在 localStorage 中的值恢复选定的内容。
 function restore_options() {
