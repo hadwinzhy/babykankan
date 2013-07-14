@@ -18,7 +18,7 @@ function save_options() {
         username: localStorage.getItem(CONST_STORAGE_USERNAME),
         password: localStorage.getItem(CONST_STORAGE_PASSWORD)
     }});
-
+    chrome.extension.sendRequest({method: "reloadFriends"});
 }
 // 从保存在 localStorage 中的值恢复选定的内容。
 function restore_options() {

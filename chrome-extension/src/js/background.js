@@ -93,6 +93,14 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 });
 
 
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    if (request.method == "reloadFriends"){
+        reloadUsers()
+    }
+});
+
+
+
 console.log("backbround init-------");
 
 
