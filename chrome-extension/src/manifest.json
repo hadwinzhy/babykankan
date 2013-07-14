@@ -1,0 +1,33 @@
+{
+  "name": "Baby KanKan",
+  "version": "0.0.1",
+  "description": "淘宝购物分享",
+  "manifest_version": 2,
+  "icons": {
+    "16": "img/icon16.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "css": ["css/content-script.css"],
+      "js": ["js/libs/jquery.js", "js/libs/utils.js", "js/chrome/url.js"],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+  "background":{
+    "scripts":[
+        "js/libs/jquery.js",
+        "js/background.js"
+        ]
+  },
+  "options_page":"options.html",
+  "permissions" : [
+    "tabs",
+      "http://*/*", "https://*/*",
+    "http://*.tmall.com/*",
+    "https://*.taobao.com/*"
+  ]
+}

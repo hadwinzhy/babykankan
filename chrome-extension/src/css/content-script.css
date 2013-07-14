@@ -1,0 +1,17 @@
+#claram-email-iframe {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 999999999;
+}
+
+#claram-email-iframe.transparent {
+  opacity: 0.5;
+}
+
+#claram-email-iframe.transparent:hover, #claram-email-iframe.transparent.nontransparent {
+  opacity: 1.0;
+}
