@@ -6,7 +6,7 @@
 function shareClick(info, tab) {
     chrome.tabs.getSelected(null,function(tab) {
         var tablink = tab.url;
-        var id = tablink.match(/&id=(\d+)/)
+        var id = tablink.match(/id=(\d+)/)
         console.log(id)
 
         $.ajax({

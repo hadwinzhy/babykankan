@@ -9,8 +9,11 @@ var loginUrl = server +"login/";
  * 获取用户列表
  * @return {*}
  */
+
+
 function getUsers(){
-    return JSON.parse(localStorage.getItem(CONST_STORAGE_USER_LIST));
+    var users = JSON.parse(localStorage.getItem(CONST_STORAGE_USER_LIST));
+    return users;
 }
 
 function getCurrentUserName(){
@@ -46,10 +49,11 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
                   }
                   localStorage.setItem(CONST_STORAGE_USER_LIST, JSON.stringify(users));
-                console.log(users)
+                console.log(getUsers())
 
             },
             error:function(){
+                console.log("error")
                 var users = [{
                     id:1,
                     username:"Liangdi"
@@ -58,6 +62,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                     username:"郑老师"
                 }]
                 localStorage.setItem(CONST_STORAGE_USER_LIST,  JSON.stringify(users));
+                console.log(getUsers());
             }
         })
 
@@ -106,8 +111,8 @@ console.log("backbround init-------");
 
 //查询分享信息
 
-var queryUrl = "http://www.baidu.com";
-var queryInterval = 3000;
+var queryUrl = server + "read_sharing/";
+var queryInterval = 5000;
 
 
 ~(function queryShares(){
@@ -115,11 +120,30 @@ var queryInterval = 3000;
     $.ajax({
         url:queryUrl,
         success:function(data){
-
+             console.log(data)
+             if(data.success){
+                  if(data.num_iids && data.num_iids.length){
+                     notfy("您有新的商品分享,请查看!");
+                  }
+             }
         },
         complete:function(){
+            //notfy("分享查询中...")
             setTimeout(queryShares,queryInterval);
         }
     })
 })()
+
+function notfy(msg) {
+    var opt = {
+        type: "list",
+        title: "分享提示",
+        message: msg,
+        iconUrl: "img/expand.png"
+    }
+    chrome.notifications.create("share", opt,function(){});
+    setTimeout(function(){
+        chrome.notifications.clear("share", function callback(){})
+    },3000)
+}
 

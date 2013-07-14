@@ -38,7 +38,7 @@ class ItemSharing(db.Model):
     from_user = db.relationship('User', foreign_keys=[from_user_id], backref=db.backref('sharings_sent', lazy='dynamic', cascade='all, delete-orphan'))
     to_user = db.relationship('User', foreign_keys=[to_user_id], backref=db.backref('sharings_received', lazy='dynamic', cascade='all, delete-orphan'))
 
-    def __init__(self, from_user, to_user, num_iid, timestamp):
+    def __init__(self, from_user, to_user, num_iid):
         self.from_user = from_user
         self.to_user = to_user
         self.num_iid = num_iid
