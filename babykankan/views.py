@@ -16,9 +16,13 @@ def load_user(user_id):
 @app.before_first_request
 def create():
     db.create_all()
-    user1 = User(u'Alice', u'1234')
-    user2 = User(u'Bob', u'1234')
-    db.session.add_all([user1, user2])
+    user1 = User(u'小莉', u'1234')
+    user2 = User(u'小芳', u'1234')
+    user3 = User(u'小花', u'1234')
+    user4 = User(u'小美', u'1234')
+    user5 = User(u'小红', u'1234')
+    user1.friends.extend([user2, user3, user4, user5])
+    db.session.add_all([user1, user2, user3, user4, user5])
     db.session.commit()
 
 
