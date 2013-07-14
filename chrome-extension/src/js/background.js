@@ -5,6 +5,13 @@ var CONST_STORAGE_USER_LIST = "__STORAGE_USER_LIST__";
 var server = "http://localhost:8080/"
 var loginUrl = server +"login";
 
+/**
+ * 获取用户列表
+ * @return {*}
+ */
+function getUsers(){
+    return localStorage.getItem(CONST_STORAGE_USER_LIST);
+}
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     console.log("back  onRequest...",request.values);
@@ -46,6 +53,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (request.method == "getUsers"){
+
         if(sendResponse){
             var username = localStorage.getItem(CONST_STORAGE_USERNAME);
             var password = localStorage.getItem(CONST_STORAGE_PASSWORD);
