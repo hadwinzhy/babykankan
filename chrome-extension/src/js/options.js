@@ -11,7 +11,6 @@ function save_options() {
         password: localStorage.getItem(CONST_STORAGE_PASSWORD)
     }});
 }
-
 // 从保存在 localStorage 中的值恢复选定的内容。
 function restore_options() {
 

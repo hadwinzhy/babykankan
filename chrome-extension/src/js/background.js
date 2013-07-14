@@ -10,7 +10,6 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     console.log("back  onRequest...",request.values);
     if (request.method == "setLocalStorage"){
         var values = request.values;
-
         localStorage.setItem(CONST_STORAGE_USERNAME,values.username);
         localStorage.setItem(CONST_STORAGE_PASSWORD,values.password);
         $.ajax({
@@ -26,9 +25,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             }
         })
 
-
-
     }
+
 });
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
@@ -38,7 +36,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             var password = localStorage.getItem(CONST_STORAGE_PASSWORD);
             sendResponse({
                 username:username,
-                apiKey:password
+                password:password
             });
         }
         
