@@ -1,39 +1,44 @@
-var CONST_STORAGE_EMAIL = "__STORAGE_EMAIL__";
-var CONST_STORAGE_API_KEY = "__STORAGE_API_KEY__";
-var CONST_STORAGE_POBOX_LIST = "__STORAGE_POBOX_LIST__";
+var CONST_STORAGE_USERNAME = "__STORAGE_USERNAME__";
+var CONST_STORAGE_PASSWORD = "__STORAGE_PASSWORD__";
+var CONST_STORAGE_USER_LIST = "__STORAGE_USER_LIST__";
+
+var server = "http://localhost:8080/"
+var loginUrl = server +"login";
+
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    console.log("back  onRequest...");
+    console.log("back  onRequest...",request.values);
     if (request.method == "setLocalStorage"){
         var values = request.values;
-        localStorage.setItem(CONST_STORAGE_EMAIL,values.email);
-        localStorage.setItem(CONST_STORAGE_API_KEY,values.apiKey);
-        if(!values.pobox_list){
-            var apiclient = new ClamraAPI(values.email, values.apiKey);
-            apiclient.listPobox(function(success, data){
-                var pobox_list = [];
-                $.each(data, function(index, item){
-                    pobox_list.push(item['name']);
-                });
-                localStorage.setItem(CONST_STORAGE_POBOX_LIST, pobox_list);
-            });
-        }
-        else{
-            localStorage.setItem(CONST_STORAGE_POBOX_LIST, values.pobox_list);
-        }
+
+        localStorage.setItem(CONST_STORAGE_USERNAME,values.username);
+        localStorage.setItem(CONST_STORAGE_PASSWORD,values.password);
+        $.ajax({
+            url:loginUrl,
+            data:{
+                username:values.username,
+                password:values.password
+            },
+            success:function(data){
+                  if(data.success){
+                      localStorage.setItem(CONST_STORAGE_USER_LIST, data.users);
+                  }
+            }
+        })
+
+
+
     }
 });
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (request.method == "getOptions"){
         if(sendResponse){
-            var email = localStorage.getItem(CONST_STORAGE_EMAIL);
-            var apiKey = localStorage.getItem(CONST_STORAGE_API_KEY);
-            var poboxList = localStorage.getItem(CONST_STORAGE_POBOX_LIST);
+            var username = localStorage.getItem(CONST_STORAGE_USERNAME);
+            var password = localStorage.getItem(CONST_STORAGE_PASSWORD);
             sendResponse({
-                email:email,
-                apiKey:apiKey,
-                poboxList: poboxList
+                username:username,
+                apiKey:password
             });
         }
         
@@ -42,22 +47,36 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 });
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    if (request.method == "createPobox"){
+    if (request.method == "getUsers"){
         if(sendResponse){
-            var email = localStorage.getItem(CONST_STORAGE_EMAIL);
-            var apiKey = localStorage.getItem(CONST_STORAGE_API_KEY);
-            var poboxList = localStorage.getItem(CONST_STORAGE_POBOX_LIST);
-            var apiclient = new ClamraAPI(email, apiKey);
-            apiclient.createPobox(function(success, data){
-                if(success){
-                    poboxList = poboxList + ',' + data['name']
-                    localStorage.setItem(CONST_STORAGE_POBOX_LIST, poboxList);
-                    sendResponse(data['name']);
-                }
-            });
+            var username = localStorage.getItem(CONST_STORAGE_USERNAME);
+            var password = localStorage.getItem(CONST_STORAGE_PASSWORD);
+            var users = localStorage.getItem(CONST_STORAGE_USER_LIST);
+           sendResponse({username:username,password:password,users:users})
         }
     }
 });
 
 
-console.log("back-------");
+console.log("backbround init-------");
+
+
+//查询分享信息
+
+var queryUrl = "http://www.baidu.com";
+var queryInterval = 3000;
+
+
+~(function queryShares(){
+    console.log("query shares ... ...")
+    $.ajax({
+        url:queryUrl,
+        success:function(data){
+
+        },
+        complete:function(){
+            setTimeout(queryShares,queryInterval);
+        }
+    })
+})()
+
