@@ -3,14 +3,14 @@ var CONST_STORAGE_PASSWORD = "__STORAGE_PASSWORD__";
 var CONST_STORAGE_USER_LIST = "__STORAGE_USER_LIST__";
 
 var server = "http://127.0.0.1:5000/"
-var loginUrl = server +"login";
+var loginUrl = server +"login/";
 
 /**
  * 获取用户列表
  * @return {*}
  */
 function getUsers(){
-    return localStorage.getItem(CONST_STORAGE_USER_LIST);
+    return JSON.parse(localStorage.getItem(CONST_STORAGE_USER_LIST));
 }
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
@@ -27,9 +27,22 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                 password:values.password
             },
             success:function(data){
+
+                  var users = [];
+
                   if(data.success){
-                      localStorage.setItem(CONST_STORAGE_USER_LIST, data.users);
+                       for(var i = 0 ; i < data.f_ids.length;i++){
+                           var u = {
+                               id:data.f_ids[i],
+                               username:data.f_names[i]
+                           }
+                           users.push(u);
+                       }
+
                   }
+                  localStorage.setItem(CONST_STORAGE_USER_LIST, JSON.stringify(users));
+                console.log(users)
+
             },
             error:function(){
                 var users = [{
@@ -39,7 +52,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                     id:2,
                     username:"郑老师"
                 }]
-                localStorage.setItem(CONST_STORAGE_USER_LIST, users);
+                localStorage.setItem(CONST_STORAGE_USER_LIST,  JSON.stringify(users));
             }
         })
 
