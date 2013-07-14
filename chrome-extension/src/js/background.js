@@ -2,7 +2,7 @@ var CONST_STORAGE_USERNAME = "__STORAGE_USERNAME__";
 var CONST_STORAGE_PASSWORD = "__STORAGE_PASSWORD__";
 var CONST_STORAGE_USER_LIST = "__STORAGE_USER_LIST__";
 
-var server = "http://localhost:8080/"
+var server = "http://127.0.0.1:5000/"
 var loginUrl = server +"login";
 
 /**
@@ -21,6 +21,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         localStorage.setItem(CONST_STORAGE_PASSWORD,values.password);
         $.ajax({
             url:loginUrl,
+            type:"POST",
             data:{
                 username:values.username,
                 password:values.password
@@ -29,6 +30,16 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                   if(data.success){
                       localStorage.setItem(CONST_STORAGE_USER_LIST, data.users);
                   }
+            },
+            error:function(){
+                var users = [{
+                    id:1,
+                    username:"Liangdi"
+                },{
+                    id:2,
+                    username:"郑老师"
+                }]
+                localStorage.setItem(CONST_STORAGE_USER_LIST, users);
             }
         })
 
